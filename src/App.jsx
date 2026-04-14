@@ -155,22 +155,36 @@ export default function App() {
    return (
       <main>
          <div id="game-container">
-            <ol id="players" className="highlight-player">
+            <ol
+               id="players"
+               className="highlight-player"
+            >
                <Player
                   name={PLAYERS.X}
                   symbol="X"
-                  isActive={activePlayer === 'X'}
+                  isActive={activePlayer === "X"}
                   onChangeName={handlePlayerNameChange}
                />
                <Player
                   name={PLAYERS.O}
                   symbol="O"
-                  isActive={activePlayer === 'O'}
+                  isActive={activePlayer === "O"}
                   onChangeName={handlePlayerNameChange}
                />
             </ol>
-            {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart} />}
-            <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
+            {(winner || hasDraw) && (
+               <GameOver
+                  winner={winner}
+                  onRestart={handleRestart}
+               />
+            )}
+            <GameBoard
+               onSelectSquare={handleSelectSquare}
+               board={gameBoard}
+               currentPlayer={
+                  PLAYERS[activePlayer] === "computer" ? "computer" : null
+               }
+            />
          </div>
          <Log turns={gameTurns} />
       </main>

@@ -1,4 +1,4 @@
-function GameBoard({ board, onSelectSquare }) {
+function GameBoard({ board, onSelectSquare, currentPlayer }) {
    return (
       <ol id="game-board">
          {board.map((row, rowIndex) => (
@@ -6,7 +6,7 @@ function GameBoard({ board, onSelectSquare }) {
                <ol>
                   {row.map((playerSymbol, colIndex) => (
                      <li key={colIndex}>
-                        <button onClick={() => onSelectSquare(colIndex, rowIndex)} disabled={playerSymbol !== null}>
+                        <button onClick={() => onSelectSquare(colIndex, rowIndex)} disabled={(playerSymbol !== null || currentPlayer.toLowerCase() === 'computer')}>
                            {playerSymbol}
                         </button>
                      </li>
