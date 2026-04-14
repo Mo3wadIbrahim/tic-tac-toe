@@ -123,7 +123,7 @@ export default function App() {
             if (move.row !== -1) {
                handleSelectSquare(move.col, move.row);
             }
-         }, 600);
+         }, 1000); // Simulate thinking time
          return () => clearTimeout(timer);
       }
    }, [activePlayer, winner, hasDraw, gameBoard]);
@@ -182,7 +182,7 @@ export default function App() {
                onSelectSquare={handleSelectSquare}
                board={gameBoard}
                currentPlayer={
-                  PLAYERS[activePlayer] === "computer" ? "computer" : null
+                  players[activePlayer].toLocaleLowerCase() === "computer" ? "computer" : null
                }
             />
          </div>
