@@ -6,7 +6,7 @@ function GameBoard({ board, onSelectSquare, currentPlayer }) {
                <ol>
                   {row.map((playerSymbol, colIndex) => (
                      <li key={colIndex}>
-                        <button onClick={() => onSelectSquare(colIndex, rowIndex)} disabled={(playerSymbol !== null || currentPlayer.toLowerCase() === 'computer')}>
+                        <button onClick={() => onSelectSquare(colIndex, rowIndex)} disabled={(playerSymbol !== null || currentPlayer === 'computer')}>
                            {playerSymbol}
                         </button>
                      </li>
