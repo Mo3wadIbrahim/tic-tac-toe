@@ -117,7 +117,7 @@ export default function App() {
 
    // AI Turn effect
    useEffect(() => {
-      if (!winner && !hasDraw && players[activePlayer].toLocaleLowerCase() === "computer") {
+      if (!winner && !hasDraw && activePlayer === 'O') {
          const timer = setTimeout(() => {
             const move = findBestMove(gameBoard);
             if (move.row !== -1) {
