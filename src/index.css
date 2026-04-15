@@ -185,7 +185,7 @@ ol {
    font-size: 2rem;
    cursor: pointer;
    font-family: 'Caprasimo', cursive;
-   padding: 1rem;
+   padding: 0.5rem;
 }
 
 #game-over {
