@@ -152,7 +152,7 @@ ol {
    color: #f8c031;
    border: none;
    font-family: 'Caprasimo', cursive;
-   font-size: 4rem;
+   font-size: 2rem;
    text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
    animation: pulse-text-size 2s infinite ease-out;
 }
@@ -177,12 +177,12 @@ ol {
 }
 
 #game-board button {
-   width: 8rem;
-   height: 8rem;
+   width: 4rem;
+   height: 4rem;
    border: none;
    background: #aca788;
    color: #3f3b00;
-   font-size: 5rem;
+   font-size: 3rem;
    cursor: pointer;
    font-family: 'Caprasimo', cursive;
    padding: 1rem;
