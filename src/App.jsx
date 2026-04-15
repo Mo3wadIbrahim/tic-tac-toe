@@ -117,7 +117,7 @@ export default function App() {
 
    // AI Turn effect
    useEffect(() => {
-      if (activePlayer === 'O' && !winner && !hasDraw) {
+      if (!winner && !hasDraw && players[activePlayer].toLocaleLowerCase() === "computer") {
          const timer = setTimeout(() => {
             const move = findBestMove(gameBoard);
             if (move.row !== -1) {
@@ -181,9 +181,7 @@ export default function App() {
             <GameBoard
                onSelectSquare={handleSelectSquare}
                board={gameBoard}
-               currentPlayer={
-                  players[activePlayer].toLocaleLowerCase() === "computer" ? "computer" : null
-               }
+               activePlayer={activePlayer}
             />
          </div>
          <Log turns={gameTurns} />
