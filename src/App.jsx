@@ -5,8 +5,8 @@ import Log from "./components/Log";
 import GameOver from "./components/GameOver";
 // --- Constants ---
 const PLAYERS = {
-   X: 'Player 1',
-   O: 'Computer',
+   X: "Player 1",
+   O: "Computer",
 };
 
 const INITIAL_GAME_BOARD = [
@@ -15,14 +15,46 @@ const INITIAL_GAME_BOARD = [
    [null, null, null],
 ];
 const WINNING_COMBINATIONS = [
-   [{ row: 0, col: 0 }, { row: 0, col: 1 }, { row: 0, col: 2 }],
-   [{ row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 }],
-   [{ row: 2, col: 0 }, { row: 2, col: 1 }, { row: 2, col: 2 }],
-   [{ row: 0, col: 0 }, { row: 1, col: 0 }, { row: 2, col: 0 }],
-   [{ row: 0, col: 1 }, { row: 1, col: 1 }, { row: 2, col: 1 }],
-   [{ row: 0, col: 2 }, { row: 1, col: 2 }, { row: 2, col: 2 }],
-   [{ row: 0, col: 0 }, { row: 1, col: 1 }, { row: 2, col: 2 }],
-   [{ row: 0, col: 2 }, { row: 1, col: 1 }, { row: 2, col: 0 }],
+   [
+      { row: 0, col: 0 },
+      { row: 0, col: 1 },
+      { row: 0, col: 2 },
+   ],
+   [
+      { row: 1, col: 0 },
+      { row: 1, col: 1 },
+      { row: 1, col: 2 },
+   ],
+   [
+      { row: 2, col: 0 },
+      { row: 2, col: 1 },
+      { row: 2, col: 2 },
+   ],
+   [
+      { row: 0, col: 0 },
+      { row: 1, col: 0 },
+      { row: 2, col: 0 },
+   ],
+   [
+      { row: 0, col: 1 },
+      { row: 1, col: 1 },
+      { row: 2, col: 1 },
+   ],
+   [
+      { row: 0, col: 2 },
+      { row: 1, col: 2 },
+      { row: 2, col: 2 },
+   ],
+   [
+      { row: 0, col: 0 },
+      { row: 1, col: 1 },
+      { row: 2, col: 2 },
+   ],
+   [
+      { row: 0, col: 2 },
+      { row: 1, col: 1 },
+      { row: 2, col: 0 },
+   ],
 ];
 
 // --- Helper Functions ---
@@ -50,8 +82,8 @@ function checkWinnerInternal(board) {
 // Minimax Algorithm for unbeatable AI
 function minimax(board, depth, isMaximizing) {
    const result = checkWinnerInternal(board);
-   if (result === 'O') return 10 - depth;
-   if (result === 'X') return depth - 10;
+   if (result === "O") return 10 - depth;
+   if (result === "X") return depth - 10;
 
    const isFull = board.every((row) => row.every((cell) => cell !== null));
    if (isFull) return 0;
@@ -61,7 +93,7 @@ function minimax(board, depth, isMaximizing) {
       for (let i = 0; i < 3; i++) {
          for (let j = 0; j < 3; j++) {
             if (board[i][j] === null) {
-               board[i][j] = 'O';
+               board[i][j] = "O";
                let score = minimax(board, depth + 1, false);
                board[i][j] = null;
                bestScore = Math.max(score, bestScore);
@@ -74,7 +106,7 @@ function minimax(board, depth, isMaximizing) {
       for (let i = 0; i < 3; i++) {
          for (let j = 0; j < 3; j++) {
             if (board[i][j] === null) {
-               board[i][j] = 'X';
+               board[i][j] = "X";
                let score = minimax(board, depth + 1, true);
                board[i][j] = null;
                bestScore = Math.min(score, bestScore);
@@ -91,7 +123,7 @@ function findBestMove(board) {
    for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
          if (board[i][j] === null) {
-            board[i][j] = 'O';
+            board[i][j] = "O";
             let score = minimax(board, 0, false);
             board[i][j] = null;
             if (score > bestScore) {
@@ -109,7 +141,8 @@ export default function App() {
    const [players, setPlayers] = useState(PLAYERS);
    const [gameTurns, setGameTurns] = useState([]);
 
-   const activePlayer = gameTurns.length > 0 && gameTurns[0].player === 'X' ? 'O' : 'X';
+   const activePlayer =
+      gameTurns.length > 0 && gameTurns[0].player === "X" ? "O" : "X";
    const gameBoard = deriveBoard(gameTurns);
    const winnerSymbol = checkWinnerInternal(gameBoard);
    const winner = winnerSymbol ? players[winnerSymbol] : null;
@@ -117,7 +150,7 @@ export default function App() {
 
    // AI Turn effect
    useEffect(() => {
-      if (!winner && !hasDraw && activePlayer === 'O') {
+      if (!winner && !hasDraw && activePlayer === "O") {
          const timer = setTimeout(() => {
             const move = findBestMove(gameBoard);
             if (move.row !== -1) {
@@ -132,7 +165,8 @@ export default function App() {
       if (gameBoard[rowIndex][colIndex] || winner) return;
 
       setGameTurns((prevTurns) => {
-         const currentPlayer = prevTurns.length > 0 && prevTurns[0].player === 'X' ? 'O' : 'X';
+         const currentPlayer =
+            prevTurns.length > 0 && prevTurns[0].player === "X" ? "O" : "X";
          const updatedTurns = [
             { square: { col: colIndex, row: rowIndex }, player: currentPlayer },
             ...prevTurns,
