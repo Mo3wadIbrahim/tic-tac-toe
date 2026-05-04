@@ -9,8 +9,6 @@ import {
   INITIAL_GAME_BOARD,
 } from "./constants.js";
 
-// --- Helper Functions ---
-
 function deriveBoard(logTurns) {
   const gameBoard = [...INITIAL_GAME_BOARD.map((row) => [...row])];
   for (const logTurn of logTurns) {
@@ -31,8 +29,7 @@ function checkWinnerInternal(board) {
   return null;
 }
 
-// Minimax Algorithm for unbeatable AI
-function minimax(board, depth, isMaximizing) {
+function minimax(board, depth, isMaximizing, maxDepth) {
   const result = checkWinnerInternal(board);
   if (result === "O") return 10 - depth;
   if (result === "X") return depth - 10;
@@ -40,13 +37,15 @@ function minimax(board, depth, isMaximizing) {
   const isFull = board.every((row) => row.every((cell) => cell !== null));
   if (isFull) return 0;
 
+  if (depth >= maxDepth) return 0;
+
   if (isMaximizing) {
     let bestScore = -Infinity;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === null) {
           board[i][j] = "O";
-          let score = minimax(board, depth + 1, false);
+          let score = minimax(board, depth + 1, false, maxDepth);
           board[i][j] = null;
           bestScore = Math.max(score, bestScore);
         }
@@ -59,7 +58,7 @@ function minimax(board, depth, isMaximizing) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === null) {
           board[i][j] = "X";
-          let score = minimax(board, depth + 1, true);
+          let score = minimax(board, depth + 1, true, maxDepth);
           board[i][j] = null;
           bestScore = Math.min(score, bestScore);
         }
@@ -72,11 +71,14 @@ function minimax(board, depth, isMaximizing) {
 function findBestMove(board) {
   let bestScore = -Infinity;
   let move = { row: -1, col: -1 };
+
+  const difficultyDepth = 10;
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       if (board[i][j] === null) {
         board[i][j] = "O";
-        let score = minimax(board, 0, false);
+        let score = minimax(board, 0, false, difficultyDepth);
         board[i][j] = null;
         if (score > bestScore) {
           bestScore = score;
@@ -87,7 +89,6 @@ function findBestMove(board) {
   }
   return move;
 }
-// --- Main Component ---
 
 export default function App() {
   const [players, setPlayers] = useState(PLAYERS);
@@ -100,7 +101,6 @@ export default function App() {
   const winner = winnerSymbol ? players[winnerSymbol] : null;
   const hasDraw = gameTurns.length === 9 && !winner;
 
-  // AI Turn effect
   useEffect(() => {
     if (!winner && !hasDraw && activePlayer === "O") {
       const timer = setTimeout(() => {
@@ -108,7 +108,7 @@ export default function App() {
         if (move.row !== -1) {
           handleSelectSquare(move.col, move.row);
         }
-      }, 1000); // Simulate thinking time
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [activePlayer, winner, hasDraw, gameBoard]);
@@ -141,28 +141,22 @@ export default function App() {
   return (
     <main>
       <div id="game-container">
-        <ol
-          id="players"
-          className="highlight-player"
-        >
+        <ol id="players" className="highlight-player">
           <Player
-            name={PLAYERS.X}
+            name={players.X}
             symbol="X"
             isActive={activePlayer === "X"}
             onChangeName={handlePlayerNameChange}
           />
           <Player
-            name={PLAYERS.O}
+            name={players.O}
             symbol="O"
             isActive={activePlayer === "O"}
             onChangeName={handlePlayerNameChange}
           />
         </ol>
         {(winner || hasDraw) && (
-          <GameOver
-            winner={winner}
-            onRestart={handleRestart}
-          />
+          <GameOver winner={winner} onRestart={handleRestart} />
         )}
         <GameBoard
           onSelectSquare={handleSelectSquare}
