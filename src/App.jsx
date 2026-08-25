@@ -45,7 +45,7 @@ function minimax(board, depth, isMaximizing, maxDepth) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === null) {
           board[i][j] = "O";
-          let score = minimax(board, depth + 1, false, maxDepth);
+          let score = minimax(board, depth + 8, false, maxDepth);
           board[i][j] = null;
           bestScore = Math.max(score, bestScore);
         }
