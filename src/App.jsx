@@ -40,7 +40,7 @@ function minimax(board, depth, isMaximizing, maxDepth) {
   if (depth >= maxDepth) return 0;
 
   if (isMaximizing) {
-    let bestScore = -6;
+    let bestScore = -Infinity;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === null) {
@@ -68,23 +68,40 @@ function minimax(board, depth, isMaximizing, maxDepth) {
   }
 }
 
-function findBestMove(board) {
-  let bestScore = -Infinity;
-  let move = { row: -1, col: -1 };
-
-  const difficultyDepth = 10;
-
+function findBestMove(board, difficulty) {
+  const availableMoves = [];
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       if (board[i][j] === null) {
-        board[i][j] = "O";
-        let score = minimax(board, 0, false, difficultyDepth);
-        board[i][j] = null;
-        if (score > bestScore) {
-          bestScore = score;
-          move = { row: i, col: j };
-        }
+        availableMoves.push({ row: i, col: j });
       }
+    }
+  }
+
+  if (availableMoves.length === 0) return { row: -1, col: -1 };
+
+  let randomThreshold = 0;
+  if (difficulty === "easy") randomThreshold = 0.8;
+  if (difficulty === "medium") randomThreshold = 0.5;
+  if (difficulty === "hard") randomThreshold = 0.2;
+  if (difficulty === "max") randomThreshold = 0;
+
+  if (Math.random() < randomThreshold) {
+    const randomIndex = Math.floor(Math.random() * availableMoves.length);
+    return availableMoves[randomIndex];
+  }
+
+  let bestScore = -Infinity;
+  let move = { row: -1, col: -1 };
+  const maxDepth = 9;
+
+  for (const m of availableMoves) {
+    board[m.row][m.col] = "O";
+    let score = minimax(board, 0, false, maxDepth);
+    board[m.row][m.col] = null;
+    if (score > bestScore) {
+      bestScore = score;
+      move = m;
     }
   }
   return move;
@@ -93,6 +110,7 @@ function findBestMove(board) {
 export default function App() {
   const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
+  const [difficulty, setDifficulty] = useState("max");
 
   const activePlayer =
     gameTurns.length > 0 && gameTurns[0].player === "X" ? "O" : "X";
@@ -104,14 +122,14 @@ export default function App() {
   useEffect(() => {
     if (!winner && !hasDraw && activePlayer === "O") {
       const timer = setTimeout(() => {
-        const move = findBestMove(gameBoard);
+        const move = findBestMove(gameBoard, difficulty);
         if (move.row !== -1) {
           handleSelectSquare(move.col, move.row);
         }
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [activePlayer, winner, hasDraw, gameBoard]);
+  }, [activePlayer, winner, hasDraw, gameBoard, difficulty]);
 
   function handleSelectSquare(colIndex, rowIndex) {
     if (gameBoard[rowIndex][colIndex] || winner) return;
@@ -141,6 +159,19 @@ export default function App() {
   return (
     <main>
       <div id="game-container">
+        <div id="difficulty-selector">
+          <label htmlFor="difficulty">AI Difficulty: </label>
+          <select 
+            id="difficulty" 
+            value={difficulty} 
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="max">Max (Impossible)</option>
+          </select>
+        </div>
         <ol id="players" className="highlight-player">
           <Player
             name={players.X}

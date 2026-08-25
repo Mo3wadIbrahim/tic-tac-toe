@@ -96,6 +96,43 @@ h1 {
   position: relative;
 }
 
+/* Difficulty Selector */
+#difficulty-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+}
+
+#difficulty-selector label {
+  font-family: var(--font-family-secondary);
+  color: var(--color-player-info);
+  font-size: 1.2rem;
+}
+
+#difficulty-selector select {
+  font-family: var(--font-family-primary);
+  background-color: var(--color-input-bg);
+  color: var(--color-player-info);
+  border: 2px solid var(--color-primary-yellow);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+#difficulty-selector select:hover {
+  background-color: var(--color-game-container-gradient-top);
+  box-shadow: 0 0 8px rgba(246, 227, 90, 0.4);
+}
+
+#difficulty-selector select:focus {
+  border-color: var(--color-secondary-yellow);
+}
+
 /* Players Section */
 #players {
   list-style: none;
