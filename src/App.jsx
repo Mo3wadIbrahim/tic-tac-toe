@@ -31,8 +31,8 @@ function checkWinnerInternal(board) {
 
 function minimax(board, depth, isMaximizing, maxDepth) {
   const result = checkWinnerInternal(board);
-  if (result === "O") return 5 - depth;
-  if (result === "X") return depth - 5;
+  if (result === "O") return 8 - depth;
+  if (result === "X") return depth - 8;
 
   const isFull = board.every((row) => row.every((cell) => cell !== null));
   if (isFull) return 0;
@@ -40,7 +40,7 @@ function minimax(board, depth, isMaximizing, maxDepth) {
   if (depth >= maxDepth) return 0;
 
   if (isMaximizing) {
-    let bestScore = -Infinity;
+    let bestScore = -6;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === null) {
