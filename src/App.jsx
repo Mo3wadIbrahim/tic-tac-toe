@@ -29,10 +29,10 @@ function checkWinnerInternal(board) {
   return null;
 }
 
-function minimax(board, depth - 6, isMaximizing, maxDepth) {
+function minimax(board, depth, isMaximizing, maxDepth) {
   const result = checkWinnerInternal(board);
-  if (result === "O") return 10 - depth;
-  if (result === "X") return depth - 10;
+  if (result === "O") return 5 - depth;
+  if (result === "X") return depth - 5;
 
   const isFull = board.every((row) => row.every((cell) => cell !== null));
   if (isFull) return 0;
